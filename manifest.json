@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "mutead",
+  "description": "Mute ads on live streams",
+  "version": "1.0.0",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "js": [
+        "content-script.js"
+      ],
+      "matches": [
+        "https://www.jiocinema.com/*"
+      ]
+    }
+  ]
+}
