@@ -1,17 +1,34 @@
+const shouldMuteAd = (isAdPlaying, currentVolume, isMuted) => {
+    return isAdPlaying && currentVolume > 0 && !isMuted;
+}
+
+const shouldUnMuteAd = (isAdPlaying, isMutedByExtension) => {
+    return !isAdPlaying && isMutedByExtension;
+}
+
 const muteAds = () => {
     const videoElement = document.getElementById("player_video_elem");
     if (!videoElement) return;
 
-    if (isAdPlaying()) {
+    const currentVolume = videoElement.volume;
+    const isMuted = !!videoElement.muted;
+    const isAdPlaying = isPlayingAd();
+
+    if (shouldMuteAd(isAdPlaying, currentVolume, isMuted)) {
         console.log("muting");
         previousVolume = videoElement.volume;
         videoElement.muted = true;
-    } else {
-        console.log("unmuting");
+        isMutedByExtension = true;
+    }
+
+
+    if (shouldUnMuteAd(isAdPlaying, isMutedByExtension)) {
+        console.log("unmuting", isAdPlaying, isMutedByExtension);
         if (videoElement.muted) {
             videoElement.muted = false;
         }
-        videoElement.volume = 1.0; // Restore previous volume or default to 1
+        videoElement.volume = previousVolume || 1.0; // Restore previous volume or default to 1
+        isMutedByExtension = false;
     }
 };
 
@@ -24,6 +41,7 @@ const isAdVideo = (video) => {
     return video.duration < 30 || video.classList.contains("ad-video");
 };
 
-let previousVolume = 1;
+var previousVolume = 1;
+var isMutedByExtension = false;
 
 setInterval(muteAds, 1000);
