@@ -40,10 +40,10 @@ const muteAds = () => {
 //     // return !!adTagElement && adTagElement.length > 0 && adTagElement.item(0).innerHTML === 'AD';
 // }
 
-const isPlayingAd = () => {
+const findProbableAdDivs = () => {
     const adDivAncestor = document.getElementById("player-wrapper");
     const candidateAdDivElements = adDivAncestor.querySelectorAll("div");
-    const adDivList = Array.from(candidateAdDivElements).filter(candidateDiv => {
+    return Array.from(candidateAdDivElements).filter(candidateDiv => {
         const classnames = Array.from(candidateDiv.classList);
         const containsAdClass = classnames.some((className) => /-adTag$/.test(className));
 
@@ -53,7 +53,10 @@ const isPlayingAd = () => {
 
         return false;
     });
+}
 
+const isPlayingAd = () => {
+    const adDivList = findProbableAdDivs();
     return adDivList.length > 0;
 }
 
