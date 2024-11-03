@@ -32,14 +32,30 @@ const muteAds = () => {
     }
 };
 
-const isAdPlaying = () => {
-    const adTagElement = document.getElementsByClassName("mui-style-5kj990-adTag");
-    return !!adTagElement && adTagElement.length > 0 && adTagElement.item(0).innerHTML === 'AD';
-}
+// const isPlayingAd = () => {
+//     // const adTagElement = document.getElementsByClassName("mui-style-5kj990-adTag");
+//     const adTagElement = document.getElementsByClassName("mui-style-q6mwaa-controlWrapper");
+//     console.log(adTagElement);
+//     return adTagElement.length > 0;
+//     // return !!adTagElement && adTagElement.length > 0 && adTagElement.item(0).innerHTML === 'AD';
+// }
 
-const isAdVideo = (video) => {
-    return video.duration < 30 || video.classList.contains("ad-video");
-};
+const isPlayingAd = () => {
+    const adDivAncestor = document.getElementById("player-wrapper");
+    const candidateAdDivElements = adDivAncestor.querySelectorAll("div");
+    const adDivList = Array.from(candidateAdDivElements).filter(candidateDiv => {
+        const classnames = Array.from(candidateDiv.classList);
+        const containsAdClass = classnames.some((className) => /-adTag$/.test(className));
+
+        if (containsAdClass) {
+            return candidateDiv.innerHTML === "AD";
+        }
+
+        return false;
+    });
+
+    return adDivList.length > 0;
+}
 
 var previousVolume = 1;
 var isMutedByExtension = false;
