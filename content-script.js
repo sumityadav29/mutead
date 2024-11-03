@@ -3,10 +3,15 @@ const muteAds = () => {
     if (!videoElement) return;
 
     if (isAdPlaying()) {
+        console.log("muting");
         previousVolume = videoElement.volume;
         videoElement.muted = true;
     } else {
-        videoElement.volume = previousVolume;
+        console.log("unmuting");
+        if (videoElement.muted) {
+            videoElement.muted = false;
+        }
+        videoElement.volume = 1.0; // Restore previous volume or default to 1
     }
 };
 
